@@ -14,14 +14,15 @@ import (
 
 // OutputCounts displays a success/failure counter, much like `ping` would
 func OutputCounts(s *int, f *int) {
+    var successRate float64
     if *s == 0 {
-        successRate := 0
+        successRate = 0
     } else if *f == 0 {
-        successRate := 100
+        successRate = 100
     } else {
-        successRate := (1-(*f / *s))*100
+        successRate = float64(1-(*f / *s))*100
     }
-    fmt.Printf("\npolly terminated! Successful GETs: %d, Failed GETs: %d, Success Rate: %d%\n",*s,*f)
+    fmt.Printf("\npolly terminated! Successful GETs: %d, Failed GETs: %d, Success Rate: %v\n",*s,*f,successRate)
 }
 
 // InfluxAsyncGet polls the Tesla Gen3 Wall Connector and writes results to
