@@ -12,6 +12,18 @@ import (
 	"github.com/influxdata/influxdb-client-go/v2/api"
 )
 
+// OutputCounts displays a success/failure counter, much like `ping` would
+func OutputCounts(s *int, f *int) {
+    if *s == 0 {
+        successRate := 0
+    } else if *f == 0 {
+        successRate := 100
+    } else {
+        successRate := (1-(*f / *s))*100
+    }
+    fmt.Printf("\npolly terminated! Successful GETs: %d, Failed GETs: %d, Success Rate: %d%\n",*s,*f)
+}
+
 // InfluxAsyncGet polls the Tesla Gen3 Wall Connector and writes results to
 // InfluxDB with an aync, non-blocking client you supply. You must also
 // supply the IP of the wall conenctor.
