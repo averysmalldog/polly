@@ -66,6 +66,9 @@ func main() {
 	defer client.Close()
 	defer writeAPI.Flush()
 	for {
+        // TODO: I think I need to use channels here, this feels like the
+        // right way to approach the problem. I want to capture ^C and 
+        // then calculate the totals when it's done.
 		go InfluxAsyncGet(&writeAPI, hpwcIP, &success, &failure)
 		time.Sleep(time.Millisecond * 1000)
 	}
