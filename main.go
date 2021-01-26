@@ -12,36 +12,28 @@ import (
 	"github.com/influxdata/influxdb-client-go/v2/api"
 )
 
-// OutputCounts displays a success/failure counter, much like `ping` would
-func OutputCounts(s *int, f *int) {
-    var successRate float64
-    if *s == 0 {
-        successRate = 0
-    } else if *f == 0 {
-        successRate = 100
-    } else {
-        successRate = float64(1-(*f / *s))*100
-    }
-    fmt.Printf("\npolly terminated! Successful GETs: %d, Failed GETs: %d, Success Rate: %v\n",*s,*f,successRate)
-}
-
 // InfluxAsyncGet polls the Tesla Gen3 Wall Connector and writes results to
 // InfluxDB with an aync, non-blocking client you supply. You must also
 // supply the IP of the wall conenctor.
-func InfluxAsyncGet(writeAPI *api.WriteAPI, wcIP string, success *int, failure *int) {
+func InfluxAsyncGet(writeAPI *api.WriteAPI, wcIP string) {
 	client := *writeAPI
     var data map[string]interface{}
+
     resp, err := http.Get(fmt.Sprintf("http://%s/api/1/vitals", wcIP))
     if err != nil {
         fmt.Println("error - during GET of hpwc. Do you have the right IP?")
-        *failure++
         return
     }
-	defer resp.Body.Close()
+
+    defer resp.Body.Close()
+    
 	body, _ := ioutil.ReadAll(resp.Body)
-	json.Unmarshal(body, &data)
+    json.Unmarshal(body, &data)
+    
+    // Output a dot (.) for every successful GET against the Wall Connector
+    // This helps people like me who need to see something to know it works
     fmt.Printf(".")
-    *success++
+
 	p := influxdb2.NewPoint(
 		"hpwc",
 		map[string]string{
@@ -51,25 +43,21 @@ func InfluxAsyncGet(writeAPI *api.WriteAPI, wcIP string, success *int, failure *
 		},
 		data,
 		time.Now())
-
 	client.WritePoint(p)
-
 }
 
 func main() {
 	hpwcIP := os.Getenv("HPWC_IP")
 	client := influxdb2.NewClientWithOptions("http://localhost:8086", "my-token", influxdb2.DefaultOptions().SetBatchSize(20))
     writeAPI := client.WriteAPI("admin", "tesla")
-    success := 0
-    failure := 0
-    defer OutputCounts(&success, &failure)
+
+    // The way this is set up, these likely don't get executed on ^C.
 	defer client.Close()
-	defer writeAPI.Flush()
+    defer writeAPI.Flush()
+    
+    // Simple, isn't it?
 	for {
-        // TODO: I think I need to use channels here, this feels like the
-        // right way to approach the problem. I want to capture ^C and 
-        // then calculate the totals when it's done.
-		go InfluxAsyncGet(&writeAPI, hpwcIP, &success, &failure)
+		go InfluxAsyncGet(&writeAPI, hpwcIP)
 		time.Sleep(time.Millisecond * 1000)
 	}
 }
