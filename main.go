@@ -46,8 +46,11 @@ func InfluxAsyncGet(writeAPI *api.WriteAPI, wcIP string) {
 	client.WritePoint(p)
 }
 
-func main() {
-	hpwcIP := os.Getenv("HPWC_IP")
+// Execute simply runs the totality of polly in your program. It is
+// recommended you run this as a goroutine so your program can do
+// other things.
+func Execute() {
+    hpwcIP := os.Getenv("HPWC_IP")
 	client := influxdb2.NewClientWithOptions("http://localhost:8086", "my-token", influxdb2.DefaultOptions().SetBatchSize(20))
 	writeAPI := client.WriteAPI("admin", "tesla")
 
@@ -60,4 +63,8 @@ func main() {
 		go InfluxAsyncGet(&writeAPI, hpwcIP)
 		time.Sleep(time.Millisecond * 1000)
 	}
+}
+
+func main() {
+	Execute()
 }
