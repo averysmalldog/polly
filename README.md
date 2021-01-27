@@ -1,14 +1,13 @@
 # polly
-A simple program for periodically GET-ing from an API (For now, a Tesla Gen 3 Wall Connector) and dumping the output into a datastore (for now, InfluxDB).
+A simple Go module for periodically GET-ing from an API (For now, a Tesla Gen 3 Wall Connector) and dumping the output into a datastore (for now, InfluxDB).
 
 ## Prerequisites
 
 _Note: these prerequisites will be reduced if and when I genericize this tool._
 
-- You will need [Go 1.14+](https://golang.org/dl/) installed to compile `polly`.
 - You will need a local instance of InfluxDB running on `localhost:8086` with a database called `tesla` that has no auth.
 - You will need a [Tesla HPWC Gen3](https://shop.tesla.com/product/wall-connector) installed, provisioned, and joined to your home (or business) wifi.
-- You will need to be able to reach the HPWC from whatever computer you run this stack on.
+- You will need to be able to reach the HPWC from whatever computer you run this code on.
 
 ## Using polly
 
