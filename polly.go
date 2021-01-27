@@ -1,4 +1,4 @@
-package main
+package polly
 
 import (
 	"encoding/json"
@@ -63,8 +63,4 @@ func Execute() {
 		go InfluxAsyncGet(&writeAPI, hpwcIP)
 		time.Sleep(time.Millisecond * 1000)
 	}
-}
-
-func main() {
-	Execute()
 }
