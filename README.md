@@ -21,3 +21,9 @@ You will see one dot for each successful GET against the Wall Connector, as you 
 % go run main.go
 ...........
 ```
+
+If `polly` can't reach your Gen 3 Wall Connector, you'll get this error for each time the GET fails:
+
+```shell
+error - during GET of hpwc. Do you have the right IP?
+```
