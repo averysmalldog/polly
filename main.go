@@ -50,7 +50,7 @@ func InfluxAsyncGet(writeAPI *api.WriteAPI, wcIP string) {
 // recommended you run this as a goroutine so your program can do
 // other things.
 func Execute() {
-    hpwcIP := os.Getenv("HPWC_IP")
+	hpwcIP := os.Getenv("HPWC_IP")
 	client := influxdb2.NewClientWithOptions("http://localhost:8086", "my-token", influxdb2.DefaultOptions().SetBatchSize(20))
 	writeAPI := client.WriteAPI("admin", "tesla")
 
