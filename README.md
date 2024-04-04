@@ -1,3 +1,8 @@
+> # Note: `polly` is being deprecated
+> Turns out, sometimes one repo is better than two. I created this repo as an exercise for what I imagined might be some kind of grand, sprawling heap of complex functionality down the line. That's not exactly what happened. Check out the release note for averysmalldog/tesla-gen3wc-monitor.
+> 
+> Long story short, I'm going to put this repo in read-only mode (archive it) since it is essentially a historical artifact.
+
 # polly
 A simple Go module for periodically GET-ing from an API (For now, a Tesla Gen 3 Wall Connector) and dumping the output into a datastore (for now, InfluxDB).
 
